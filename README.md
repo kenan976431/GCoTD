@@ -10,4 +10,4 @@ Demo for paper: GCoTD: A Graph Chain-of-Thought Based Black-box Universal Backdo
 
 This project stands on the shoulders of giants. Special thanks to:
 
-* ([bboylyg](https://github.com/bboylyg/BackdoorLLM))
+* [bboylyg](https://github.com/bboylyg/BackdoorLLM)
