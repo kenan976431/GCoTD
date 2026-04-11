@@ -61,17 +61,17 @@ GCoTD (**G**raph **C**hain-**o**f-**T**hought **D**etection) is a black-box, non
 
 ## Key Components
 
-| Component | File | Paper Reference |
-|-----------|------|-----------------|
-| `BackdoorFenceDetector` | `gcotd/model.py` | §3.3-c, Eq. 4 |
-| `LoRALinear` | `gcotd/model.py` | §3.3-c ("We employ LoRA…") |
-| `ReasoningGraph` | `gcotd/model.py` | §3.2, Definition G=(V,E,F) |
-| `GCoTTemplate` + template DB | `gcotd/templates.py` | §3.3-a, Tables 9–11, Listing 1 |
-| `TemplateRetriever` | `gcotd/retrieval.py` | §3.3-a, Eq. 1–2 |
-| `GraphGenerator` | `gcotd/graph_generation.py` | §3.3-b, Eq. 3, Figure 3 |
-| `BackdoorFence` | `gcotd/backdoor_fence.py` | §3.3-c |
-| `JudgeLLM` | `gcotd/backdoor_fence.py` | Appendix E, Figure 4 |
-| `GCoTDPipeline` | `gcotd/pipeline.py` | Figure 2 (full pipeline) |
+| Component | File |
+|-----------|------|
+| `BackdoorFenceDetector` | `gcotd/model.py` |
+| `LoRALinear` | `gcotd/model.py` |
+| `ReasoningGraph` | `gcotd/model.py` |
+| `GCoTTemplate` + template DB | `gcotd/templates.py` |
+| `TemplateRetriever` | `gcotd/retrieval.py` |
+| `GraphGenerator` | `gcotd/graph_generation.py` |
+| `BackdoorFence` | `gcotd/backdoor_fence.py` | 
+| `JudgeLLM` | `gcotd/backdoor_fence.py` | 
+| `GCoTDPipeline` | `gcotd/pipeline.py` | 
 
 ---
 
