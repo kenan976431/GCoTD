@@ -1,0 +1,106 @@
+# GCoTD Configuration
+# ====================
+# All hyperparameters from the paper, organized by section.
+# Reference: "GCoTD: A Non-Intrusive Diagnostic Pipeline for Black-Box LLM
+#             Backdoor Detection via Graph Chain-of-Thought" (IJCAI 2026)
+
+# ─────────────────────────────────────────────────────────────
+# Section 3.3-(a): Template Retrieval
+# ─────────────────────────────────────────────────────────────
+retrieval:
+  top_n: 3                    # Number of templates T_1..T_N retrieved (Eq. 2)
+  similarity_threshold: 0.3   # θ – minimum cosine sim to include a template
+  use_embedding: true         # Use sentence-transformer for similarity
+
+# ─────────────────────────────────────────────────────────────
+# Section 3.3-(b): Graph Generation / Appendix D
+# ─────────────────────────────────────────────────────────────
+graph_generation:
+  max_nodes: 20               # "nodes cannot exceed 20" (Appendix D)
+  max_tokens: 1024
+  # LLM generation parameters (Appendix A)
+  llama_temperature: 0.0      # LLaMA series: temp=0
+  llama_top_p: 0.75
+  llama_top_k: 50
+  gpt_temperature: 1.0        # GPT-4o, Claude, DeepSeek: temp=1
+  gpt_top_p: 1.0
+
+# ─────────────────────────────────────────────────────────────
+# Section 3.3-(c): Backdoor Fence Detector
+# ─────────────────────────────────────────────────────────────
+detector:
+  backbone: "sentence-transformers/all-MiniLM-L6-v2"
+  hidden_dim: 384
+  # LoRA (Section 3.3-c: "We employ LoRA for parameter-efficient fine-tuning")
+  lora_r: 8
+  lora_alpha: 16.0
+  dropout: 0.1
+  # Joint objective (Eq. 4): L = λ·L_BCE + (1-λ)·Σ log P(y_e|P_Det⊕G)
+  lambda_weight: 0.4          # λ = 0.4 (paper)
+  # Training
+  learning_rate: 0.00005      # 5×10^{-5} (paper)
+  batch_size: 32
+  num_epochs: 10
+  warmup_ratio: 0.1
+  max_seq_length: 512
+  # Inference
+  detection_threshold: 0.5
+
+# ─────────────────────────────────────────────────────────────
+# Section 3.3-(c) Data Preparation
+# ─────────────────────────────────────────────────────────────
+data:
+  # 6 attack types × (500 poisoned + 500 clean) = 6,000 samples
+  attack_types:
+    - badnet
+    - vpi
+    - sleeper
+    - badedit
+    - badchain
+    - ta2
+  samples_per_attack: 500
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+# ─────────────────────────────────────────────────────────────
+# Judge LLM (Appendix E)
+# ─────────────────────────────────────────────────────────────
+judge:
+  use_judge: true
+  n_reference_graphs: 2
+  temperature: 0.0            # Deterministic for consistent judging
+
+# ─────────────────────────────────────────────────────────────
+# Section 4.1: Implementation Settings
+# ─────────────────────────────────────────────────────────────
+implementation:
+  # "All experiments conducted on NVIDIA GeForce RTX A6000 GPUs"
+  # "Python 3.8 and Huggingface 4.46.3"
+  # "GPT-oss as graph generator, MiniLM-L6-v2 as detector"
+  graph_generator_model: "gpt-4o"   # GPT-oss equivalent
+  python_version: "3.8+"
+  huggingface_version: "4.46.3"
+
+# ─────────────────────────────────────────────────────────────
+# LLM Backbones evaluated (Appendix A / Section 4.1)
+# ─────────────────────────────────────────────────────────────
+target_models:
+  - name: "LLaMA-2-7b-chat"
+    hf_id: "meta-llama/Llama-2-7b-chat-hf"
+    gen_params: {temperature: 0, top_p: 0.75, top_k: 50}
+  - name: "LLaMA-2-13b-chat"
+    hf_id: "meta-llama/Llama-2-13b-chat-hf"
+    gen_params: {temperature: 0, top_p: 0.75, top_k: 50}
+  - name: "LLaMA-3-8b-Instruct"
+    hf_id: "meta-llama/Meta-Llama-3-8B-Instruct"
+    gen_params: {temperature: 0, top_p: 0.75, top_k: 50}
+  - name: "GPT-4o"
+    api: openai
+    gen_params: {temperature: 1, top_p: 1}
+  - name: "Claude-3.5-Sonnet"
+    api: anthropic
+    gen_params: {temperature: 1, top_p: 1}
+  - name: "DeepSeek-V3"
+    api: deepseek
+    gen_params: {temperature: 1, top_p: 1}
