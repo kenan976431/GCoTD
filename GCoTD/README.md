@@ -267,6 +267,5 @@ print(graph.linearize())
 | **BadChain** (Xiang et al., 2024) | Chain-of-Thought backdoor attack | [ICLR 2024](https://openreview.net/forum?id=c93SBwz1Ma) |
 | **BadEdit** (Li et al., 2024) | Weight-editing backdoor attack | [ICLR 2024](https://openreview.net/forum?id=duZANm2ABX) |
 | **BackdoorLLM** (Li et al., 2024) | Comprehensive backdoor benchmark | [bboylyg/BackdoorLLM](https://github.com/bboylyg/BackdoorLLM) |
-| **Graph-CoT** (Jin et al., 2024) | Graph-augmented CoT reasoning | [arXiv:2404.07103](https://arxiv.org/abs/2404.07103) |
 
 ---
